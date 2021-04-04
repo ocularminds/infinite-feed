@@ -15,11 +15,6 @@ A newsfeed portal for On-Desk fellowships showing new and relevant events. The g
 4. Run the dev server: `yarn dev`
 5. Open http://localhost:3000
 
-1. Use a separate repo for the solution. Don't fork it, use this [guide for mirrorong repos](https://docs.github.com/en/github/creating-cloning-and-archiving-repositories/duplicating-a-repository#mirroring-a-repository).
-2. Create a short Loom recording of UI and code walk-through.
-3. Write the answers to the questions in a Notion or any other kind of shared doc.
-4. Send everything above via an email to your contact at On Deck.
-
 ## Project structure
 
 Tech stack:
@@ -39,5 +34,5 @@ Folder structure:
 The database is already included in the repo (`db.sqlite`) and populated (`scripts/populate.sql`). Its basic structure:
 - `users` — people participating in fellowships;
 - `projects` — projects that founders are working on (connected to `users` through `user_projects`);
-- `announcements` — announcements by On Deck Team targeting specific fellowships or global (`fellowship = "all"`).
+- `announcements` — announcements targeting specific fellowships or global (`fellowship = "all"`).
   

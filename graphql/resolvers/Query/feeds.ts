@@ -13,15 +13,15 @@ const getOrSkipProject = (fellowship: String) => {
         Null as title,Null as avatar_url, Null as body, created_ts,updated_ts
         FROM projects`;        
     }
-    return "";
+    return " ";
 }
 
 export default async function feeds(parent: unknown, {fellowship, limit, skip}: Args): Promise<Row[]> {
-  
-    const ANGELS_FOUNDERS = "WHERE u.fellowship IN ('angels', 'founders')";
-    const WRITERS_ONLY = "WHERE u.fellowship = ?";
+    console.log('fellowship', fellowship,'limit',limit,'skip',skip)
+    const ANGELS_FOUNDERS = "WHERE fellowship IN ('angels', 'founders')";
+    const WRITERS_ONLY = "WHERE fellowship = 'writers'";
     const USERS_WHERE_CLAUSE = fellowship === "writers"? WRITERS_ONLY:ANGELS_FOUNDERS;
-    const feeds: Row[] = await db.getAll(    `
+    const feeds: Row[] = await db.getAll(`
       SELECT id, Null as name, Null as bio, null as description, null as icon_url, fellowship, 
       title,Null as avatar_url, body, created_ts, updated_ts
       FROM announcements 
@@ -29,9 +29,9 @@ export default async function feeds(parent: unknown, {fellowship, limit, skip}: 
       UNION ALL
       SELECT id,name,bio, Null as description, null as icon_url,fellowship, 
       Null as title, avatar_url, Null as body,created_ts,updated_ts
-      FROM users u ${USERS_WHERE_CLAUSE}        
+      FROM users ${USERS_WHERE_CLAUSE}        
       ${getOrSkipProject(fellowship)}
-      order by updated_ts desc limit ${skip},${limit}
+      order by created_ts desc limit ${skip},${limit}
     `,
     [fellowship]
   )

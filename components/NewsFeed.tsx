@@ -23,10 +23,9 @@ const NewsCard = ({ feed }: FeedProps) => (
 );
 
 const renderCard = (feed: Feed) => {
-  console.dir(feed)
-  if (feed.body) return <NewsCard key={feed.id} feed={feed} />
-  if (feed.description) return <ProjectCard key={feed.id} project={feed} />
-  if (feed.name) return <UserCard key={feed.id} user={feed} />
+  if (feed.body) return <NewsCard key={`announcement-${feed.id}`} feed={feed} />
+  if (feed.description) return <ProjectCard key={`project-${feed.id}`} project={feed} />
+  if (feed.name) return <UserCard key={`user-${feed.id}`} user={feed} />
   return null;
 }
 
@@ -39,9 +38,11 @@ export default function NewsFeed({ feeds }: Props) {
 }
 
 const Container = styled.article`
-max-width: 36rem;
-padding: 0 1rem;
-margin: 3rem auto 6rem;`
+  width: 600px;
+  padding: 0 1rem;
+  margin: 0;  
+  display: center;
+  `
 
 const Columns = styled.div`
   display: flex;

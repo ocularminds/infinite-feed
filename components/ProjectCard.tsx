@@ -26,7 +26,8 @@ export default function ProjectCard({project}: Props) {
     <Card>
       <Columns>
         <ColumnLeft>
-          <Icon src={project.icon_url}/>
+          <Icon src={project.icon_url}/>          
+          <Center><br/><Link href="/">Home</Link></Center>
         </ColumnLeft>
         <ColumnRight>
           <h2>{project.name}</h2>
@@ -50,6 +51,9 @@ const Icon = styled.img`
   background-color: rgba(0, 0, 0, 0.1);
   border-radius: 10px;
 `
+const Center = styled.span`
+  text-align: center;
+`;
 
 const Columns = styled.div`
   display: flex;

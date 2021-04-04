@@ -9,7 +9,8 @@ export default function UserCard({user}: UserProps) {
     <Card>
       <Columns>
         <ColumnLeft>
-          <Avatar src={user.avatar_url}/>
+          <Avatar src={user.avatar_url}/>          
+          <Center><br></br><Link href="/">Home</Link></Center>
         </ColumnLeft>
         <ColumnRight>
           <h2>{user.name}</h2>
@@ -33,6 +34,10 @@ const Avatar = styled.img`
   background-color: rgba(0, 0, 0, 0.1);
   border-radius: 10px;
 `
+
+const Center = styled.span`
+  text-align: center;
+`;
 
 const Columns = styled.div`
   display: flex;
