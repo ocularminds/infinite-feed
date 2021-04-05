@@ -10,13 +10,13 @@ const MAX_FEEDS = 3;
 
 const hasMoreFeeds = (page: number, limit: number, total: number) => {
   //const startIndex = (page - 1) * limit + 1;
-  if(total === 0 || total < limit){
+  if (total === 0 || total < limit) {
     return false;
   };
   return true;
 }
 
-const initialParams = { currentPage: 1, skipped: 0};
+const initialParams = { currentPage: 1, skipped: 0 };
 
 export default function FeedSlot() {
   const [isRendering, setIsRendering] = useState(false);
@@ -25,26 +25,24 @@ export default function FeedSlot() {
   const [total, setTotal] = useState(MAX_FEEDS);
   const [feeds, setFeeds] = useState(new Array<Feed>());
 
-  const handleClick = (e: any)=> {
-     e.preventDefault();
-     const anchor = e.target.closest("a");   // Find closest Anchor (or self)
-     if (!anchor) return;    
-     let p = Object.assign({}, initialParams);
-     setFellowship(anchor.getAttribute('href'));
-     console.dir(p);
-     setTotal(MAX_FEEDS);
-     setFeeds(new Array<Feed>());
-     setPager(p);
+  const handleClick = (e: any) => {
+    e.preventDefault();
+    const anchor = e.target.closest("a");   // Find closest Anchor (or self)
+    if (!anchor) return;
+    let p = Object.assign({}, initialParams);
+    setFellowship(anchor.getAttribute('href'));
+    setTotal(MAX_FEEDS);
+    setFeeds(new Array<Feed>());
+    setPager(p);
   };
 
-  const onWindowScroll = () => {
+  const handleScroll = () => {
     const { scrollTop, scrollHeight, clientHeight } = document.documentElement;
     if (scrollTop + clientHeight >= scrollHeight - 5 &&
       hasMoreFeeds(pager.currentPage, MAX_FEEDS, total)) {
       let p = Object.assign({}, pager);
       p.currentPage = p.currentPage + 1;
       p.skipped = MAX_FEEDS * (p.currentPage - 1);
-      console.dir(p);
       setPager(p);
     }
   }
@@ -56,13 +54,13 @@ export default function FeedSlot() {
       setIsRendering(false);
       setTotal(data.feeds.length);
       setFeeds(feeds.concat(data.feeds));
-    }, 1000);
+    }, 500);
   };
 
   useEffect(() => {
-    window.addEventListener('scroll', onWindowScroll, { passive: true });
+    window.addEventListener('scroll', handleScroll, { passive: true });
     return () => {
-      window.removeEventListener('scroll', onWindowScroll);
+      window.removeEventListener('scroll', handleScroll);
     }
   }, []);
 
@@ -73,20 +71,25 @@ export default function FeedSlot() {
     onCompleted: addFeeds
   }
   );
-  if (loading) return <Layout><Card><p>...loading</p></Card></Layout>
-  if (error) return <Layout><Card><p>Error</p></Card></Layout>
+
+  const createToolbar = () => (
+    <Toolbar>
+      <ToolTitle><Tool>Fellowship News</Tool></ToolTitle>
+      <ToolbarItem><Tool href="angels" onClick={handleClick}>Angels</Tool></ToolbarItem>
+      <ToolbarItem><Tool href="founders" onClick={handleClick}>Founders</Tool></ToolbarItem>
+      <ToolbarItem><Tool href="writers" onClick={handleClick}>Writers</Tool></ToolbarItem>
+    </Toolbar>
+  );
+
+  if (loading) return <>{createToolbar()}<Card><p>...loading</p></Card></>
+  if (error) return <>{createToolbar()}<Card><p>Error</p></Card></>
   if (!data?.feeds || loading || error) {
     return null
   }
-
+  
   return (
     <>
-      <Toolbar>
-        <ToolTitle><Tool>Fellowship News</Tool></ToolTitle>
-        <ToolbarItem><Tool href="angels" onClick={handleClick}>Angels</Tool></ToolbarItem>
-        <ToolbarItem><Tool href="founders" onClick={handleClick}>Founders</Tool></ToolbarItem>
-        <ToolbarItem><Tool href="writers" onClick={handleClick}>Writers</Tool></ToolbarItem>
-      </Toolbar>
+      {createToolbar()}
       {(loading || isRendering) && <Card><p>...loading</p></Card>}
       <NewsFeed feeds={feeds} />
     </>

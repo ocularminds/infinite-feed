@@ -18,7 +18,7 @@ const getOrSkipProject = (fellowship: String) => {
 
 export default async function feeds(parent: unknown, {fellowship, limit, skip}: Args): Promise<Row[]> {
     console.log('fellowship', fellowship,'limit',limit,'skip',skip)
-    const ANGELS_FOUNDERS = "WHERE fellowship IN ('angels', 'founders')";
+    const ANGELS_FOUNDERS = "WHERE fellowship = 'angels' OR fellowship = 'founders' ";
     const WRITERS_ONLY = "WHERE fellowship = 'writers'";
     const USERS_WHERE_CLAUSE = fellowship === "writers"? WRITERS_ONLY:ANGELS_FOUNDERS;
     const feeds: Row[] = await db.getAll(`
